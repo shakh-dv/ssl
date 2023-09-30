@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  nginx:
+    ports:
+      - "80:80"
+      - "443:443"
+    build:
+      context: .
+      target: nginx
+    restart: always
+    depends_on:
+      - front
+    volumes:
+      - /etc/letsencrypt/:/etc/letsencrypt
+    networks:
+      - app
+
+  front:
+    restart: always
+    build:
+      context: ./front
+      target: prod
+    networks:
+      - app
+
+networks:
+  app:
+    name: app
